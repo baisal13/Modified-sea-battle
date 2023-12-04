@@ -69,3 +69,16 @@ def get_player_shot():
         except ValueError as e:
             print(e)
 
+# Function to update grid after a shot
+def update_grid(grid, x, y):
+    if grid[x][y] != ".":
+        ship_size = int(grid[x][y])
+        grid[x][y] = "hit"
+        # Check if the ship is sunk
+        if all(cell != str(ship_size) for row in grid for cell in row):
+            return "sunk"
+        return "hit"
+    else:
+        grid[x][y] = "miss"
+        return "miss"
+
