@@ -5,13 +5,13 @@ import random
 def create_board():
     return [['O' for _ in range(7)] for _ in range(7)]
 
-# Function to display the board
+# Function to display the board without showing ship positions
 def display_board(board):
     os.system('cls' if os.name == 'nt' else 'clear')
     print("   A B C D E F G")
     print("  ---------------")
     for i in range(7):
-        print(i + 1, "|", " ".join(board[i]))
+        print(i + 1, "|", " ".join(cell if cell in ('X', '-', 'O') else 'O' for cell in board[i]))
     print("\n")
 
 # Function to check if ship placement is valid
