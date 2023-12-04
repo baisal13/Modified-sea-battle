@@ -115,3 +115,21 @@ def play_game():
 
     return shots
 
+# Function to start the game
+def start_game():
+    scores = {}
+    while True:
+        shots = play_game()
+        scores[shots] = scores.get(shots, []) + [input("Do you want to play again? (yes/no): ")]
+        if scores[shots][-1].lower() != 'yes':
+            clear_screen()
+            print("Game Over!")
+            print("Here are the scores:")
+            sorted_scores = sorted(scores.items(), key=lambda x: x[0])
+            for score, players in sorted_scores:
+                for player in players:
+                    print(f"Player: {player}, Shots: {score}")
+            break
+
+if __name__ == "__main__":
+    start_game()
