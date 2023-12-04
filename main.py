@@ -53,3 +53,65 @@ def convert_coordinates(coord):
     row = int(coord[1:]) - 1
     return row, col
 
+# Function to get the player's shot
+def get_player_shot():
+    while True:
+        try:
+            shot = input("Enter coordinates to fire (e.g., A1): ")
+            if len(shot) < 2 or not shot[0].isalpha() or not shot[1:].isdigit():
+                raise ValueError("Invalid input! Enter a letter followed by a number.")
+
+            row, col = convert_coordinates(shot)
+            if not (0 <= row < 7 and 0 <= col < 7):
+                raise ValueError("Coordinates out of bounds! Try again.")
+
+            return row, col
+        except ValueError as e:
+            print(e)
+
+# Function to update grid after a shot
+def update_grid(grid, x, y):
+    if grid[x][y] != ".":
+        ship_size = int(grid[x][y])
+        grid[x][y] = "hit"
+        # Check if the ship is sunk
+        if all(cell != str(ship_size) for row in grid for cell in row):
+            return "sunk"
+        return "hit"
+    else:
+        grid[x][y] = "miss"
+        return "miss"
+
+# Function to play the game
+def play_game():
+    player_name = input("Enter your name: ")
+    print(f"Hello, {player_name}! Let's play Battleship.")
+
+    shots = 0
+    game_grid = [["." for _ in range(7)] for _ in range(7)]
+    place_ships(game_grid)
+
+    while True:
+        clear_screen()
+        print("Your grid:")
+        print_grid(game_grid)
+
+        x, y = get_player_shot()
+
+        if game_grid[x][y] == "miss" or game_grid[x][y] == "hit":
+            print("You've already shot there! Try again.")
+            input("Press Enter to continue...")
+            continue
+
+        result = update_grid(game_grid, x, y)
+        shots += 1
+
+        if result == "sunk":
+            clear_screen()
+            print("Your grid:")
+            print_grid(game_grid)
+            print(f"Congratulations! You sank all ships in {shots} shots!")
+            break
+
+    return shots
+
